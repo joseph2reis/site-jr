@@ -1,0 +1,130 @@
+---
+import FooterColumn from "./FooterColumn.astro";
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+  {
+    title: "Navegação",
+    links: [
+      { label: "Início", hf: "#" },
+      { label: "Serviços", hf: "#services" },
+      { label: "Diferenciais", hf: "#features" },
+      { label: "Processo", hf: "#process" },
+    ],
+  },
+  {
+    title: "Serviços",
+    links: [
+      { label: "Sites Institucionais", hf: "#services" },
+      { label: "Landing Pages", hf: "#services" },
+      { label: "Suporte Técnico", hf: "#services" },
+    ],
+  },
+];
+---
+
+<footer class="bg-bg border-t border-border pt-20 pb-10 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- GRID PRINCIPAL -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20
+             text-center md:text-left"
+    >
+      <!-- MARCA -->
+      <div class="reveal flex flex-col items-center md:items-start gap-6">
+        <a href="#" class="flex items-center gap-2 text-2xl font-bold group">
+          <span class="text-primary font-black group-hover:scale-110 transition-transform">
+            JR
+          </span>
+          <span class="text-white text-xl">Digital Estudio</span>
+        </a>
+
+        <p class="text-text-muted leading-relaxed max-w-sm mx-auto md:mx-0">
+          Transformando ideias em presença digital de alto nível. Focado em
+          performance e design moderno direto de Belém/PA.
+        </p>
+
+        <div class="flex gap-4 justify-center md:justify-start">
+          <a
+            href="https://www.instagram.com/joseph2reis/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-10 h-10 rounded-xl bg-surface border border-border
+                   flex items-center justify-center
+                   text-text-muted hover:text-primary hover:border-primary/50
+                   transition-all duration-300"
+          >
+            <i class="fa-brands fa-instagram text-xl"></i>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/joseph2reis/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-10 h-10 rounded-xl bg-surface border border-border
+                   flex items-center justify-center
+                   text-text-muted hover:text-primary hover:border-primary/50
+                   transition-all duration-300"
+          >
+            <i class="fa-brands fa-linkedin-in text-xl"></i>
+          </a>
+
+          <a
+            href="https://github.com/joseph2reis/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-10 h-10 rounded-xl bg-surface border border-border
+                   flex items-center justify-center
+                   text-text-muted hover:text-primary hover:border-primary/50
+                   transition-all duration-300"
+          >
+            <i class="fa-brands fa-github text-xl"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- COLUNAS -->
+      {
+        footerLinks.map((col, index) => (
+          <FooterColumn title={col.title} links={col.links} index={index + 1} />
+        ))
+      }
+
+      <!-- CTA -->
+      <div class="reveal flex flex-col items-center md:items-start gap-6 text-center lg:text-left">
+        <h4 class="text-white font-bold text-lg">Vamos conversar?</h4>
+        <p class="text-text-muted max-w-xs">
+          Pronto para tirar seu projeto do papel?
+        </p>
+
+        <a
+          href="https://wa.me/5591985014864"
+          class="bg-primary/10 border border-primary/20
+                 text-primary hover:bg-primary hover:text-white
+                 px-6 py-3 rounded-xl font-bold
+                 transition-all duration-300"
+        >
+          Iniciar Projeto
+        </a>
+      </div>
+    </div>
+
+    <!-- BARRA FINAL -->
+    <div
+      class="reveal border-t border-border pt-10
+             flex flex-col md:flex-row
+             items-center justify-between
+             gap-6 text-text-muted text-sm"
+    >
+      <p class="text-center md:text-left">
+        © {currentYear} JR Digital Estudio. Todos os direitos reservados.
+      </p>
+
+      <div class="flex gap-8 justify-center md:justify-end">
+        <a href="/termos" class="hover:text-primary transition-colors">Privacidade</a>
+        <a href="/privacidade" class="hover:text-primary transition-colors">Termos</a>
+      </div>
+    </div>
+  </div>
+</footer>

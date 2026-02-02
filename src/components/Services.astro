@@ -1,0 +1,62 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import Card from "./ui/Card.astro";
+
+interface Service {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+const services: Service[] = [
+  {
+    title: "Site Institucional",
+    description:
+      "Site profissional para empresas e profissionais que precisam apresentar seus serviços com credibilidade.",
+    icon: "fa-solid fa-building",
+  },
+  {
+    title: "Landing Page",
+    description:
+      "Página focada em conversão, ideal para anúncios, campanhas ou divulgação de serviços específicos.",
+    icon: "fa-solid fa-bullseye",
+  },
+  {
+    title: "Manutenção & Suporte",
+    description:
+      "Ajustes, melhorias e suporte contínuo para manter seu site sempre atualizado e funcionando corretamente.",
+    icon: "fa-solid fa-screwdriver-wrench",
+  },
+];
+---
+
+<section id="services" class="py-16 xl:py-32 bg-bg reveal">
+  <div class="max-w-7xl mx-auto px-6">
+    <SectionHeader badge="O que fazemos" title="Serviços Especializados" />
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        services.map((item, index) => {
+          const isLast =
+            services.length % 2 !== 0 && index === services.length - 1;
+
+          return (
+            <Card
+              {...item}
+              index={index}
+              class={
+                isLast
+                  ? `
+        md:col-span-2 md:mx-auto md:max-w-1/2
+        lg:col-span-1 lg:mx-0 lg:max-w-none
+        xl:col-span-1 xl:mx-0 xl:max-w-none
+      `
+                  : ""
+              }
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

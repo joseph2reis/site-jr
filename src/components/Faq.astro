@@ -1,0 +1,67 @@
+---
+import FaqItem from "./FaqItem.astro";
+
+const faqs = [
+  {
+    question: "Quanto custa um site com você?",
+    answer:
+      "Valores a partir de R$ 1.200 para sites institucionais simples. Landing pages a partir de R$ 800. Cada projeto tem orçamento personalizado conforme funcionalidades.",
+  },
+  {
+    question: "Quanto tempo leva pra ficar pronto?",
+    answer:
+      "Sites institucionais: 2 a 4 semanas. Landing pages: 1 a 2 semanas. Depende do tamanho e da rapidez nas aprovações.",
+  },
+  {
+    question: "Eu preciso comprar domínio e hospedagem?",
+    answer:
+      "Não é obrigatório, mas recomendo. Posso te ajudar a registrar domínio (R$ 40/ano) e hospedagem (R$ 20/mês). Ou entrego o site pronto pra você subir onde quiser.",
+  },
+  {
+    question: "O site vai funcionar bem no celular?",
+    answer:
+      "Sim, 100%! Todos os sites são totalmente responsivos e otimizados pra mobile, tablet e desktop.",
+  },
+  {
+    question: "Você dá suporte depois que o site tá no ar?",
+    answer:
+      "Sim, suporte inicial de 30 dias incluso. Depois ofereço planos de manutenção mensal se precisar.",
+  },
+];
+---
+
+<section id="faq" class="py-16 xl:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+      <span
+        class="text-primary text-xs font-bold uppercase tracking-[2px] mb-2 block text-center"
+      >
+        Dúvidas comuns
+      </span>
+      <h2 class="text-3xl lg:text-5xl font-black text-white mb-4">
+        Perguntas Frequentes
+      </h2>
+      <p class="text-text-muted text-lg">
+        Tudo que você precisa saber antes de começarmos
+      </p>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-4" id="faq-container">
+      {
+        faqs.map((faq, index) => (
+          <FaqItem question={faq.question} answer={faq.answer} index={index} />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initFAQ } from "../scripts/faq";
+
+  // Roda assim que o script carregar
+  initFAQ();
+
+  // Roda se houver navegação entre páginas (View Transitions)
+  document.addEventListener("astro:after-swap", initFAQ);
+</script>

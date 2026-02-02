@@ -1,0 +1,55 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import Card from "./ui/Card.astro";
+
+const features = [
+  {
+    title: "Design moderno",
+    description: "Visual limpo, atual e alinhado com o seu negócio.",
+    icon: "fa-solid fa-pen-nib",
+  },
+  {
+    title: "Sites rápidos",
+    description: "Performance otimizada e adaptação perfeita para mobile.",
+    icon: "fa-solid fa-gauge-high",
+  },
+  {
+    title: "Atendimento direto",
+    description:
+      "Sem intermediários. Você fala direto comigo do início ao fim.",
+    icon: "fa-solid fa-user-check",
+  },
+];
+---
+
+<section id="features" class="py-16 xl:py-32">
+  <div class="max-w-7xl mx-auto px-6">
+    <SectionHeader badge="Diferenciais" title="Por que o JR?" />
+
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        features.map((item, index) => {
+          const isLast = index === features.length - 1;
+
+          const isMdSingle = features.length % 2 === 1 && isLast;
+          const isLgSingle = features.length % 3 === 1 && isLast;
+
+          return (
+            <Card
+              {...item}
+              index={index}
+              class={[
+                isMdSingle
+                  ? "md:col-span-2 md:mx-auto md:max-w-1/2 xl:col-span-1 xl:mx-0 xl:max-w-none"
+                  : "",
+                isLgSingle
+                  ? "lg:col-span-3 lg:mx-auto xl:col-span-1 xl:mx-0"
+                  : "",
+              ].join(" ")}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

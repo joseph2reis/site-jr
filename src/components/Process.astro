@@ -1,0 +1,80 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+import ProcessCard from "./ui/Card.astro";
+
+const steps = [
+  {
+    number: "1",
+    title: "Conversamos",
+    icon: "fa-solid fa-comments",
+    description:
+      "Entendo suas necessidades, objetivos e público-alvo do projeto.",
+  },
+  {
+    number: "2",
+    title: "Proposta",
+    icon: "fa-solid fa-file-invoice-dollar",
+    description: "Envio orçamento detalhado, prazos e tudo transparente.",
+  },
+  {
+    number: "3",
+    title: "Desenvolvimento",
+    icon: "fa-solid fa-code",
+    description:
+      "Crio o site com revisões constantes e aprovação em cada etapa.",
+  },
+  {
+    number: "4",
+    title: "Entrega",
+    icon: "fa-solid fa-rocket",
+    description: "Testes finais, site no ar, otimizado e com suporte incluso.",
+  },
+];
+---
+
+<section id="process" class="py-16 xl:py-32 bg-bg">
+  <div class="max-w-7xl mx-auto px-6">
+    <SectionHeader
+      badge="Como trabalho"
+      title="Meu Processo"
+      description="Transparente, simples e focado em resultados"
+    />
+
+    <div class="max-w-5xl mx-auto">
+      <div class="grid lg:grid-cols-[1fr_auto_1fr] items-center gap-8 mb-8">
+        <ProcessCard {...steps[0]} index={0} />
+
+        <div
+          class="hidden lg:block text-primary/40 text-3xl reveal"
+          style="transition-delay: 0.2s;"
+        >
+          <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <ProcessCard {...steps[1]} index={1} />
+      </div>
+
+      <div class="hidden lg:grid grid-cols-2 justify-items-center py-4 mb-8">
+        <i
+          class="fa-solid fa-arrow-down text-primary/40 text-3xl animate-bounce reveal"
+          style="transition-delay: 0.4s;"></i>
+        <i
+          class="fa-solid fa-arrow-down text-primary/40 text-3xl animate-bounce reveal"
+          style="transition-delay: 0.4s;"></i>
+      </div>
+
+      <div class="grid lg:grid-cols-[1fr_auto_1fr] items-center gap-8">
+        <ProcessCard {...steps[2]} index={2} />
+
+        <div
+          class="hidden lg:block text-primary/40 text-3xl reveal"
+          style="transition-delay: 0.6s;"
+        >
+          <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <ProcessCard {...steps[3]} index={3} />
+      </div>
+    </div>
+  </div>
+</section>

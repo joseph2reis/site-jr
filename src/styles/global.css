@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", stroke-sans, system-ui, -apple-system, sans-serif;
+
+  --color-bg: #0b0f1a;
+  --color-surface: rgba(17, 24, 39, 0.4);
+  --color-border: rgba(59, 130, 246, 0.15);
+  --color-text: #e5e7eb;
+  --color-text-muted: #9ca3af;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-primary-glow: rgba(99, 102, 241, 0.3);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+}
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal.visible.hover-trigger:hover {
+    transform: translateY(-12px);
+  }
+}

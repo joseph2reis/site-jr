@@ -1,0 +1,277 @@
+---
+import MobileMenu from "./MobileMenu.astro";
+
+interface NavLink {
+  label: string;
+  hf: string;
+  submenu?: { label: string; hf: string }[];
+}
+
+const navLinks: NavLink[] = [
+  { label: "Início", hf: "#top" },
+  { label: "Sobre", hf: "#sobre" },
+  {
+    label: "Serviços",
+    hf: "#services",
+    submenu: [
+      { label: "O que fazemos", hf: "#services" },
+      { label: "Diferenciais", hf: "#features" },
+      { label: "Como funciona", hf: "#process" },
+    ],
+  },
+  { label: "Perguntas", hf: "#faq" },
+  { label: "Portfólio", hf: "#portfolio" },
+];
+---
+
+<header
+  class="sticky top-0 z-100 bg-bg/60 backdrop-blur-xl border-b border-border"
+>
+  <div class="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 text-xl font-bold group">
+      <span
+        class="text-primary font-black group-hover:scale-110 transition-transform"
+        >JR</span
+      >
+      <span class="text-white">Digital Estudio</span>
+    </a>
+
+    <!-- DESKTOP -->
+    <nav class="hidden lg:flex items-center gap-8">
+      {
+        navLinks.map((link) => (
+          <div class="relative group/nav">
+            <a
+              href={link.hf}
+              class="nav-link text-sm font-medium text-text hover:text-primary py-2 flex items-center gap-1 relative
+                     after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:w-0
+                     hover:after:w-full after:transition-all
+                     [&.active]:text-primary [&.active]:after:w-full"
+            >
+              {link.label}
+              {link.submenu && (
+                <i class="fa-solid fa-chevron-down text-[10px] group-hover/nav:rotate-180 transition-transform" />
+              )}
+            </a>
+
+            {link.submenu && (
+              <ul
+                class="absolute top-full left-0 mt-2 w-48 bg-bg/95 border border-border rounded-xl p-2
+                         opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible
+                         transition-all translate-y-2 group-hover/nav:translate-y-0 shadow-2xl"
+              >
+                {link.submenu.map((sub) => (
+                  <li>
+                    <a
+                      href={sub.hf}
+                      class="nav-link block px-4 py-2 text-sm text-text-muted hover:text-primary hover:bg-primary/10 rounded-lg
+                             [&.active]:text-primary [&.active]:font-bold"
+                    >
+                      {sub.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))
+      }
+    </nav>
+
+    <!-- BOTÃO MOBILE -->
+    <button id="menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2 z-100">
+      <span class="w-6 h-0.5 bg-white transition-all"></span>
+      <span class="w-6 h-0.5 bg-white transition-all"></span>
+      <span class="w-6 h-0.5 bg-white transition-all"></span>
+    </button>
+  </div>
+
+  <MobileMenu navLinks={navLinks} />
+</header>
+
+<script>
+  function setupHeader() {
+    /* ELEMENTOS */
+    const menuBtn = document.getElementById(
+      "menu-btn",
+    ) as HTMLButtonElement | null;
+    const mobileMenu = document.getElementById(
+      "mobile-menu",
+    ) as HTMLElement | null;
+    const closeBtn = document.getElementById(
+      "close-menu",
+    ) as HTMLButtonElement | null;
+    const overlay = document.getElementById(
+      "mobile-overlay",
+    ) as HTMLElement | null;
+
+    const sections = document.querySelectorAll<HTMLElement>("section[id]");
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+
+    /* SCROLL SPY */
+   function updateActiveLink() {
+  let current = "";
+
+  sections.forEach((section) => {
+    const top = section.offsetTop - 120;
+    const height = section.offsetHeight;
+
+    if (window.scrollY >= top && window.scrollY < top + height) {
+      current = section.id;
+    }
+  });
+
+  // Topo
+  if (window.scrollY < 200) {
+    resetActiveState();
+    document.querySelectorAll('a[href="#top"]').forEach((l) => {
+      l.classList.add("active");
+    });
+    return; // ⬅️ IMPORTANTE
+  }
+
+  resetActiveState();
+
+  // Marca o link principal
+  navLinks.forEach((link) => {
+    if (link.getAttribute("href") === `#${current}`) {
+      link.classList.add("active");
+    }
+  });
+
+  // Submenu de Serviços
+  const submenuSections = ["features", "process"];
+
+  // Marca o submenu
+  submenuSections.forEach((id) => {
+    const subLink = document.querySelector(`a[href="#${id}"]`);
+    if (id === current && subLink) {
+      subLink.classList.add("active");
+    }
+  });
+
+  // Marca o pai "Serviços"
+  if (submenuSections.includes(current)) {
+    const servicesLink = document.querySelector(
+      '.nav-link[href="#services"]', // ⚠️ CONFIRA ISSO
+    );
+    if (servicesLink) {
+      servicesLink.classList.add("active");
+    }
+  }
+}
+
+
+    function resetActiveState() {
+      navLinks.forEach((l) => l.classList.remove("active"));
+    }
+
+    window.addEventListener("scroll", updateActiveLink);
+    updateActiveLink();
+
+    /* MENU MOBILE + TRAVA DE SCROLL */
+    function lockScroll() {
+      document.body.style.overflow = "hidden";
+      // document.documentElement.style.overflow = "hidden";
+      // document.body.style.position = "fixed";
+      // document.body.style.width = "100%";
+    }
+
+    function unlockScroll() {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+    }
+
+    function openMenu() {
+      if (!mobileMenu) return;
+      mobileMenu.classList.remove("h-0", "opacity-0");
+      mobileMenu.classList.add("h-screen", "opacity-100");
+      overlay?.classList.remove("opacity-0");
+      overlay?.classList.add("opacity-100");
+      lockScroll();
+    }
+
+    function closeMenu() {
+      if (!mobileMenu) return;
+      mobileMenu.classList.add("h-0", "opacity-0");
+      mobileMenu.classList.remove("h-screen", "opacity-100");
+      overlay?.classList.remove("opacity-100");
+      overlay?.classList.add("opacity-0");
+      unlockScroll();
+
+      // Fecha submenus
+      document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
+        s.classList.add("hidden");
+        s.classList.remove("flex");
+      });
+      document.querySelectorAll(".fa-chevron-down").forEach((i) => {
+        i.classList.remove("rotate-180");
+      });
+    }
+
+    function toggleMenu() {
+      if (!mobileMenu) return;
+      const isOpen = mobileMenu.classList.contains("opacity-100");
+      isOpen ? closeMenu() : openMenu();
+    }
+
+    menuBtn?.addEventListener("click", toggleMenu);
+    closeBtn?.addEventListener("click", closeMenu);
+    overlay?.addEventListener("click", closeMenu);
+
+    /* SUBMENU TOGGLE (abre/fecha ao clicar no texto ou seta) */
+    function closeAllSubmenus() {
+      document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
+        s.classList.add("hidden");
+        s.classList.remove("flex");
+      });
+      document.querySelectorAll(".fa-chevron-down").forEach((i) => {
+        i.classList.remove("rotate-180");
+      });
+    }
+
+    function toggleSubmenu(target: string) {
+      const submenu = document.getElementById(`submenu-${target}`);
+      const icon = document.querySelector(`[data-target="${target}"] i`);
+
+      if (!submenu) return;
+
+      const isOpen = submenu.classList.contains("flex");
+      closeAllSubmenus();
+
+      if (!isOpen) {
+        submenu.classList.remove("hidden");
+        submenu.classList.add("flex");
+        icon?.classList.add("rotate-180");
+      }
+    }
+
+    // Clique no texto principal com submenu OU na seta
+    document
+      .querySelectorAll<HTMLElement>(
+        '.mobile-link[data-has-submenu="true"], .submenu-toggle',
+      )
+      .forEach((element) => {
+        element.addEventListener("click", (e) => {
+          e.preventDefault(); // Impede rolagem padrão se for link
+
+          const target = element.getAttribute("data-target");
+          if (target) toggleSubmenu(target);
+        });
+      });
+
+    // Clique em link sem submenu ou sublink → fecha menu
+    document
+      .querySelectorAll<HTMLElement>(
+        '.mobile-link:not([data-has-submenu="true"]), [data-sub-link="true"]',
+      )
+      .forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+  }
+
+  setupHeader();
+  document.addEventListener("astro:after-swap", setupHeader);
+</script>

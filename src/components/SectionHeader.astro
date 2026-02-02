@@ -1,0 +1,33 @@
+---
+interface Props {
+  badge: string;
+  title: string;
+  description?: string;
+  centered?: boolean;
+}
+
+const { badge, title, description, centered = true } = Astro.props;
+---
+
+<div
+  class:list={[
+    "reveal mb-16 lg:mb-20 max-w-3xl",
+    centered ? "mx-auto text-center" : "text-left",
+  ]}
+>
+  <span
+    class="text-primary text-xs font-bold uppercase tracking-[2px] mb-2 block"
+  >
+    {badge}
+  </span>
+
+  <h2 class="text-3xl lg:text-5xl font-black text-white mb-4 leading-tight">
+    {title}
+  </h2>
+
+  {
+    description && (
+      <p class="text-text-muted text-lg leading-relaxed">{description}</p>
+    )
+  }
+</div>

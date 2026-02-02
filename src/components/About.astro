@@ -1,0 +1,78 @@
+---
+import { Image } from "astro:assets";
+import imageAbout from "../assets/img/perfil-joseph.webp";
+import imageAboutPerfil from "../assets/img/perfil.webp";
+---
+
+<section id="sobre" class="relative py-16 xl:py-32 overflow-hidden">
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <div
+      id="parallax-bg"
+      class="absolute hidden xl:block inset-0 bg-contain xl:-mt-25 bg-no-repeat opacity-80 scale-110"
+      style={`background-image: url(${imageAbout.src}); transition: transform 0.1s ease-out;`}
+    >
+    </div>
+    <div class="absolute inset-0 bg-linear-to-b from-bg/40 via-bg/80 to-bg">
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 reveal">
+    <div
+      class="reveal ml-auto max-w-2xl bg-surface backdrop-blur-xl border border-border rounded-3xl p-8 lg:p-14 shadow-2xl"
+      style="transition-delay: 0.3s;"
+    >
+      <div class="text-center mb-8">
+        <span
+          class="text-primary text-xs font-bold uppercase tracking-[2px] mb-2 block"
+        >
+          Quem sou
+        </span>
+
+        {/* Foto Perfil (Mobile) com pulso sutil */}
+        <div
+          class="lg:hidden w-32 h-32 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-primary/50 shadow-lg shadow-primary-glow"
+        >
+          <Image
+            src={imageAboutPerfil}
+            class="w-full h-full object-cover"
+            alt="Joseph - JR Digital Estudio"
+          />
+        </div>
+
+        <h2 class="text-3xl lg:text-4xl font-black text-white">
+          Sobre o Joseph
+        </h2>
+      </div>
+
+      <div class="space-y-6 text-text-muted text-lg leading-relaxed">
+        <p>
+          Olá! Sou o <span class="text-white font-semibold">Joseph</span>,
+          desenvolvedor web de <span class="text-white font-semibold"
+            >Belém/PA</span
+          >, apaixonado por transformar ideias em sites rápidos, bonitos e que
+          realmente convertem.
+        </p>
+        <p>
+          Ajudo empresas e profissionais a terem presença digital sem
+          complicação ou custo absurdo.
+        </p>
+        <p>
+          Trabalho com foco em performance, design moderno e atendimento direto
+          — você fala comigo do começo ao fim. Vamos construir algo incrível
+          juntos?
+        </p>
+      </div>
+
+      <div class="mt-10 flex justify-center">
+        <a
+          href="https://wa.me/5591985014864?text=Olá%20Joseph!%20Vi%20a%20parte%20sobre%20você%20no%20site%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto."
+          target="_blank"
+          class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-bold flex items-center gap-3 transition-all hover:scale-105 active:scale-95 shadow-xl shadow-primary-glow"
+        >
+          <i class="fa-brands fa-whatsapp text-xl"></i>
+          Vamos conversar
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
