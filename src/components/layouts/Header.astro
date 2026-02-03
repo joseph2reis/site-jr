@@ -108,59 +108,73 @@ const navLinks: NavLink[] = [
     const sections = document.querySelectorAll<HTMLElement>("section[id]");
     const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
 
-    /* SCROLL SPY */
-   function updateActiveLink() {
-  let current = "";
+    /* 1. FUNÇÃO PARA ROLAGEM LIMPA (SEM # NA URL) */
+    function smoothScrollTo(targetId: string) {
+      if (targetId === "#") return;
 
-  sections.forEach((section) => {
-    const top = section.offsetTop - 120;
-    const height = section.offsetHeight;
+      const targetElement =
+        targetId === "#top" ? document.body : document.querySelector(targetId);
 
-    if (window.scrollY >= top && window.scrollY < top + height) {
-      current = section.id;
+      if (targetElement) {
+        const headerOffset = 80; // Ajuste conforme a altura do seu header fixo
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+        window.scrollTo({
+          top: targetId === "#top" ? 0 : offsetPosition,
+          behavior: "smooth",
+        });
+
+        // Remove o fragmento (#) da URL sem recarregar
+        history.pushState(null, "", window.location.pathname);
+      }
     }
-  });
 
-  // Topo
-  if (window.scrollY < 200) {
-    resetActiveState();
-    document.querySelectorAll('a[href="#top"]').forEach((l) => {
-      l.classList.add("active");
+    /* 2. INTERCEPTAR TODOS OS CLIQUES EM LINKS DE ÂNCORA */
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function (this: HTMLAnchorElement, e) {
+        const href = this.getAttribute("href");
+        if (href && href.startsWith("#")) {
+          e.preventDefault();
+          smoothScrollTo(href);
+        }
+      });
     });
-    return; // ⬅️ IMPORTANTE
-  }
 
-  resetActiveState();
+    /* SCROLL SPY (Mantém a classe active enquanto você rola) */
+    function updateActiveLink() {
+      let current = "";
+      sections.forEach((section) => {
+        const top = section.offsetTop - 120;
+        const height = section.offsetHeight;
+        if (window.scrollY >= top && window.scrollY < top + height) {
+          current = section.id;
+        }
+      });
 
-  // Marca o link principal
-  navLinks.forEach((link) => {
-    if (link.getAttribute("href") === `#${current}`) {
-      link.classList.add("active");
+      if (window.scrollY < 200) {
+        resetActiveState();
+        document
+          .querySelectorAll('a[href="#top"]')
+          .forEach((l) => l.classList.add("active"));
+        return;
+      }
+
+      resetActiveState();
+      navLinks.forEach((link) => {
+        if (link.getAttribute("href") === `#${current}`) {
+          link.classList.add("active");
+        }
+      });
+
+      const submenuSections = ["features", "process"];
+      if (submenuSections.includes(current)) {
+        const servicesLink = document.querySelector(
+          '.nav-link[href="#services"]',
+        );
+        if (servicesLink) servicesLink.classList.add("active");
+      }
     }
-  });
-
-  // Submenu de Serviços
-  const submenuSections = ["features", "process"];
-
-  // Marca o submenu
-  submenuSections.forEach((id) => {
-    const subLink = document.querySelector(`a[href="#${id}"]`);
-    if (id === current && subLink) {
-      subLink.classList.add("active");
-    }
-  });
-
-  // Marca o pai "Serviços"
-  if (submenuSections.includes(current)) {
-    const servicesLink = document.querySelector(
-      '.nav-link[href="#services"]', // ⚠️ CONFIRA ISSO
-    );
-    if (servicesLink) {
-      servicesLink.classList.add("active");
-    }
-  }
-}
-
 
     function resetActiveState() {
       navLinks.forEach((l) => l.classList.remove("active"));
@@ -172,16 +186,10 @@ const navLinks: NavLink[] = [
     /* MENU MOBILE + TRAVA DE SCROLL */
     function lockScroll() {
       document.body.style.overflow = "hidden";
-      // document.documentElement.style.overflow = "hidden";
-      // document.body.style.position = "fixed";
-      // document.body.style.width = "100%";
     }
 
     function unlockScroll() {
       document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.width = "";
     }
 
     function openMenu() {
@@ -201,7 +209,7 @@ const navLinks: NavLink[] = [
       overlay?.classList.add("opacity-0");
       unlockScroll();
 
-      // Fecha submenus
+      // Fecha submenus ao fechar o menu principal
       document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
         s.classList.add("hidden");
         s.classList.remove("flex");
@@ -221,7 +229,7 @@ const navLinks: NavLink[] = [
     closeBtn?.addEventListener("click", closeMenu);
     overlay?.addEventListener("click", closeMenu);
 
-    /* SUBMENU TOGGLE (abre/fecha ao clicar no texto ou seta) */
+    /* SUBMENU TOGGLE */
     function closeAllSubmenus() {
       document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
         s.classList.add("hidden");
@@ -235,7 +243,6 @@ const navLinks: NavLink[] = [
     function toggleSubmenu(target: string) {
       const submenu = document.getElementById(`submenu-${target}`);
       const icon = document.querySelector(`[data-target="${target}"] i`);
-
       if (!submenu) return;
 
       const isOpen = submenu.classList.contains("flex");
@@ -248,30 +255,32 @@ const navLinks: NavLink[] = [
       }
     }
 
-    // Clique no texto principal com submenu OU na seta
     document
       .querySelectorAll<HTMLElement>(
         '.mobile-link[data-has-submenu="true"], .submenu-toggle',
       )
       .forEach((element) => {
         element.addEventListener("click", (e) => {
-          e.preventDefault(); // Impede rolagem padrão se for link
-
+          e.preventDefault();
           const target = element.getAttribute("data-target");
           if (target) toggleSubmenu(target);
         });
       });
 
-    // Clique em link sem submenu ou sublink → fecha menu
+    // Clique em link final do mobile -> Fecha menu e rola
     document
       .querySelectorAll<HTMLElement>(
         '.mobile-link:not([data-has-submenu="true"]), [data-sub-link="true"]',
       )
       .forEach((link) => {
-        link.addEventListener("click", closeMenu);
+        link.addEventListener("click", () => {
+          closeMenu();
+          // O listener global de anchor acima já cuidará da rolagem e da URL
+        });
       });
   }
 
+  // Execução inicial e suporte ao Astro Transitions
   setupHeader();
   document.addEventListener("astro:after-swap", setupHeader);
 </script>
