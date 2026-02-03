@@ -15,9 +15,19 @@ import "../styles/global.css";
 <html lang="pt-br" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="Meu portfólio de desenvolvimento web. Exibindo meus projetos e habilidades." />
+    <meta name="keywords" content="desenvolvimento web, portfólio, astro, tailwind css, programador, freelancer" />
+    <meta name="author" content="Joseph" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Meu portfólio de desenvolvimento web. Exibindo meus projetos e habilidades." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={new URL('hero-capa.webp', Astro.url)} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
