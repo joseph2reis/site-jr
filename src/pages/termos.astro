@@ -6,40 +6,51 @@ import SectionHeader from "../components/SectionHeader.astro";
 <Layout title="Termos de Uso | JR Digital Estudio">
   <main class="py-16 md:py-32">
     <div class="max-w-4xl mx-auto px-6">
-      <SectionHeader 
-        badge="Regras" 
-        title="Termos de Uso" 
-        centered={false} 
-      />
+      <SectionHeader badge="Regras" title="Termos de Uso" centered={false} />
 
       <div class="space-y-12 text-text-muted text-lg leading-relaxed mt-12">
         <section class="reveal">
-          <h3 class="text-white text-2xl font-bold mb-4">1. Aceitação dos Termos</h3>
+          <h3 class="text-white text-2xl font-bold mb-4">
+            1. Aceitação dos Termos
+          </h3>
           <p>
-            Ao acessar o site do JR Digital Estudio, você concorda em cumprir estes termos de serviço, todas as leis e regulamentos aplicáveis.
+            Ao acessar o site do JR Digital Estudio, você concorda em cumprir
+            estes termos de serviço, todas as leis e regulamentos aplicáveis.
           </p>
         </section>
 
         <section class="reveal" style="transition-delay: 0.2s;">
           <h3 class="text-white text-2xl font-bold mb-4">2. Licença de Uso</h3>
           <p>
-            É concedida permissão para baixar temporariamente uma cópia dos materiais (informações ou software) no site do JR Digital Estudio apenas para visualização pessoal e não comercial.
+            É concedida permissão para baixar temporariamente uma cópia dos
+            materiais (informações ou software) no site do JR Digital Estudio
+            apenas para visualização pessoal e não comercial.
           </p>
         </section>
 
         <section class="reveal" style="transition-delay: 0.4s;">
-          <h3 class="text-white text-2xl font-bold mb-4">3. Responsabilidades</h3>
+          <h3 class="text-white text-2xl font-bold mb-4">
+            3. Responsabilidades
+          </h3>
           <p>
-            O JR Digital Estudio busca manter as informações do site sempre atualizadas e precisas, porém não se responsabiliza por erros técnicos ou omissões pontuais. O uso do material é de inteira responsabilidade do usuário.
+            O JR Digital Estudio busca manter as informações do site sempre
+            atualizadas e precisas, porém não se responsabiliza por erros
+            técnicos ou omissões pontuais. O uso do material é de inteira
+            responsabilidade do usuário.
           </p>
         </section>
       </div>
 
       <div class="mt-20 pt-10 border-t border-border reveal">
-        <a href="/" class="group text-primary font-bold flex items-center gap-2 transition-all">
-          <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i> 
-          Voltar para o início
-        </a>
+        <button
+          onclick="history.back()"
+          class="group text-primary font-bold flex items-center gap-2 transition-all cursor-pointer"
+        >
+          <i
+            class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"
+          ></i>
+          Voltar
+        </button>
       </div>
     </div>
   </main>
