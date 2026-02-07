@@ -1,9 +1,9 @@
 ---
-interface NavLink {
+type NavLink = {
   label: string;
-  hf: string;
-  submenu?: { label: string; hf: string }[];
-}
+  hf?: string;
+  submenu?: NavLink[];
+};
 
 interface Props {
   navLinks: NavLink[];
@@ -19,75 +19,88 @@ const { navLinks } = Astro.props;
   aria-hidden="true"
 >
   <!-- Overlay escuro (fecha ao clicar fora) -->
-  <div id="mobile-overlay" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-500"></div>
+  <div
+    id="mobile-overlay"
+    class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-500"
+  >
+  </div>
 
   <!-- Conteúdo do menu -->
   <div class="relative z-10 min-h-screen flex flex-col">
     <!-- Cabeçalho -->
-    <div class="flex items-center justify-between p-6 border-b border-border/30 bg-surface/80 backdrop-blur-lg">
+    <div
+      class="flex items-center justify-between p-6 border-b border-border/30 bg-surface/80 backdrop-blur-lg"
+    >
       <a href="/" class="flex items-center gap-2 text-xl font-bold">
         <span class="text-primary font-black">JR</span>
         <span class="text-white">Digital Studio</span>
       </a>
 
       <!-- Botão fechar (X) -->
-      <button id="close-menu" class="text-white hover:text-primary transition-colors p-2 rounded-full hover:bg-primary/10" aria-label="Fechar menu">
+      <button
+        id="close-menu"
+        class="text-white hover:text-primary transition-colors p-2 rounded-full hover:bg-primary/10"
+        aria-label="Fechar menu"
+      >
         <i class="fa-solid fa-xmark text-3xl"></i>
       </button>
     </div>
 
     <!-- Links principais -->
     <nav class="p-6 flex flex-col gap-1 flex-1">
-      {navLinks.map((link) => {
-        const target = link.label.replace(/\s+/g, "-").toLowerCase();
+      {
+        navLinks.map((link) => {
+          const target = link.label.replace(/\s+/g, "-").toLowerCase();
 
-        return (
-          <div class="flex flex-col border-b border-border/20 last:border-b-0">
-            <div class="flex justify-between items-center">
-              <a
-                href={link.hf}
-                class="mobile-link nav-link text-lg font-semibold py-5 text-white transition-all hover:text-primary hover:pl-2 flex-1"
-                data-has-submenu={link.submenu ? "true" : "false"}
-                data-target={target}
-              >
-                {link.label}
-              </a>
+          return (
+            <div class="flex flex-col border-b border-border/20 last:border-b-0">
+              <div class="flex justify-between items-center">
+                <a
+                  href={link.hf}
+                  class="mobile-link nav-link text-lg font-semibold py-5 text-white transition-all hover:text-primary hover:pl-2 flex-1"
+                  data-has-submenu={link.submenu ? "true" : "false"}
+                  data-target={target}
+                >
+                  {link.label}
+                </a>
+
+                {link.submenu && (
+                  <button
+                    class="submenu-toggle p-5 text-primary transition-transform"
+                    data-target={target}
+                    aria-expanded="false"
+                    aria-controls={`submenu-${target}`}
+                  >
+                    <i class="fa-solid fa-chevron-down text-base transition-transform duration-300" />
+                  </button>
+                )}
+              </div>
 
               {link.submenu && (
-                <button
-                  class="submenu-toggle p-5 text-primary transition-transform"
-                  data-target={target}
-                  aria-expanded="false"
-                  aria-controls={`submenu-${target}`}
+                <div
+                  id={`submenu-${target}`}
+                  class="hidden flex-col gap-2 pl-6 pb-4 pt-2 transition-all duration-300 ease-in-out overflow-hidden"
                 >
-                  <i class="fa-solid fa-chevron-down text-base transition-transform duration-300"></i>
-                </button>
+                  {link.submenu.map((sub) => (
+                    <a
+                      href={sub.hf}
+                      class="mobile-link nav-link text-base py-3 text-text-muted hover:text-primary transition-all pl-4 border-l-2 border-transparent hover:border-primary hover:pl-6"
+                      data-sub-link="true"
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
+                </div>
               )}
             </div>
-
-            {link.submenu && (
-              <div
-                id={`submenu-${target}`}
-                class="hidden flex-col gap-2 pl-6 pb-4 pt-2 transition-all duration-300 ease-in-out overflow-hidden"
-              >
-                {link.submenu.map((sub) => (
-                  <a
-                    href={sub.hf}
-                    class="mobile-link nav-link text-base py-3 text-text-muted hover:text-primary transition-all pl-4 border-l-2 border-transparent hover:border-primary hover:pl-6"
-                    data-sub-link="true"
-                  >
-                    {sub.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
+          );
+        })
+      }
     </nav>
 
-  
-    <div class="mt-auto p-6 border-t border-border/30 bg-surface/50 backdrop-blur-lg">
+    <div
+      class="mt-auto p-6 border-t border-border/30 bg-surface/50 backdrop-blur-lg"
+    >
       <a
         href="https://wa.me/5591985014864?text=Olá%20JR!%20Estava%20no%20seu%20site%20e%20gostei%20muito%20do%20trabalho.%20Quero%20um%20orçamento%20para%20um%20site%20profissional.%20Pode%20me%20ajudar%20com%20mais%20detalhes%20sobre%20valores%20e%20prazos?"
         target="_blank"
@@ -102,9 +115,10 @@ const { navLinks } = Astro.props;
 </div>
 
 <style>
-  
   #mobile-menu {
-    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    transition:
+      height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.5s ease;
   }
 
   #mobile-overlay {
@@ -112,7 +126,10 @@ const { navLinks } = Astro.props;
   }
 
   .mobile-link {
-    transition: color 0.3s ease, padding-left 0.3s ease, border-color 0.3s ease;
+    transition:
+      color 0.3s ease,
+      padding-left 0.3s ease,
+      border-color 0.3s ease;
   }
 
   .mobile-link:hover {
@@ -124,14 +141,14 @@ const { navLinks } = Astro.props;
     transition: transform 0.3s ease;
   }
 
- 
   [id^="submenu-"] {
     max-height: 0;
-    transition: max-height 0.4s ease-in-out, padding 0.4s ease;
+    transition:
+      max-height 0.4s ease-in-out,
+      padding 0.4s ease;
   }
 
   [id^="submenu-"].flex {
-    max-height: 500px; 
+    max-height: 500px;
   }
 </style>
-

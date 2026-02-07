@@ -1,26 +1,25 @@
 ---
 import MobileMenu from "./MobileMenu.astro";
 
-interface NavLink {
+type NavLink = {
   label: string;
-  hf: string;
-  submenu?: { label: string; hf: string }[];
-}
+  hf?: string;
+  submenu?: NavLink[];
+};
 
 const navLinks: NavLink[] = [
   { label: "Início", hf: "/#top" },
   { label: "Sobre", hf: "/#sobre" },
   {
     label: "Serviços",
-    hf: "#service",
     submenu: [
       { label: "O que fazemos", hf: "/#services" },
       { label: "Diferenciais", hf: "/#features" },
       { label: "Como funciona", hf: "/#process" },
     ],
   },
-  { label: "Perguntas", hf: "#faq" },
-  { label: "Portfólio", hf: "#portfolio" },
+  { label: "Perguntas", hf: "/#faq" },
+  { label: "Portfólio", hf: "/#portfolio" },
 ];
 ---
 
@@ -108,11 +107,11 @@ const navLinks: NavLink[] = [
     const sections = document.querySelectorAll<HTMLElement>("section[id]");
     const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
 
-    /* 1. FUNÇÃO PARA ROLAGEM LIMPA (SEM # NA URL) */
+   
     function smoothScrollTo(rawTarget: string) {
       if (!rawTarget) return;
 
-      // Extrai o id independente de # ou /#
+      
       const targetId = rawTarget.includes("#")
         ? rawTarget.split("#")[1]
         : rawTarget;
@@ -124,7 +123,7 @@ const navLinks: NavLink[] = [
 
       if (!targetElement) return;
 
-      const headerOffset = 80; // altura do header fixo
+      const headerOffset = 80; 
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
@@ -133,11 +132,11 @@ const navLinks: NavLink[] = [
         behavior: "smooth",
       });
 
-      // Remove o fragmento (#) da URL sem recarregar
+
       history.replaceState(null, "", window.location.pathname);
     }
 
-    /* 2. INTERCEPTAR TODOS OS CLIQUES EM LINKS DE ÂNCORA */
+   
     document
       .querySelectorAll<HTMLAnchorElement>('a[href*="#"]')
       .forEach((anchor) => {
@@ -149,50 +148,76 @@ const navLinks: NavLink[] = [
 
           const currentPath = window.location.pathname;
 
-          // Se for OUTRA página → deixa navegar normalmente
+       
           if (path && path !== "" && path !== currentPath) {
             return;
           }
 
-          // Se chegou aqui, é âncora DA MESMA PÁGINA
           e.preventDefault();
           smoothScrollTo(href);
         });
       });
 
-    /* SCROLL SPY (Mantém a classe active enquanto você rola) */
+
     function updateActiveLink() {
       let current = "";
+
       sections.forEach((section) => {
         const top = section.offsetTop - 120;
         const height = section.offsetHeight;
+
         if (window.scrollY >= top && window.scrollY < top + height) {
           current = section.id;
         }
       });
 
+
+      resetActiveState();
+
       if (window.scrollY < 200) {
-        resetActiveState();
-        document
-          .querySelectorAll('a[href="#top"]')
-          .forEach((l) => l.classList.add("active"));
+        activateById("top");
         return;
       }
 
-      resetActiveState();
+      if (!current) return;
+
+
+      activateById(current);
+
+  
+      const hierarchy: Record<string, string> = {
+        services: "Serviços",
+        features: "Serviços",
+        process: "Serviços",
+      };
+
+      if (hierarchy[current]) {
+        navLinks.forEach((link) => {
+          if (link.textContent?.trim() === hierarchy[current]) {
+            link.classList.add("active");
+          }
+        });
+      }
+
+      Object.entries(hierarchy).forEach(([parent, children]) => {
+        if (children.includes(current)) {
+          activateById(parent);
+        }
+      });
+    }
+
+
+    function activateById(id: string) {
       navLinks.forEach((link) => {
-        if (link.getAttribute("href") === `#${current}`) {
+        const href = link.getAttribute("href");
+        if (!href) return;
+
+        const linkId = href.includes("#") ? href.split("#")[1] : "";
+
+        if (linkId === id) {
           link.classList.add("active");
         }
       });
-
-      const submenuSections = ["features", "process"];
-      if (submenuSections.includes(current)) {
-        const servicesLink = document.querySelector(
-          '.nav-link[href="#services"]',
-        );
-        if (servicesLink) servicesLink.classList.add("active");
-      }
     }
 
     function resetActiveState() {
