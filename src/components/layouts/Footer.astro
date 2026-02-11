@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import FooterColumn from "./FooterColumn.astro";
+import Logo from "../../assets/img/logo-jr.png";
 
 const currentYear = new Date().getFullYear();
 
@@ -34,11 +36,11 @@ const footerLinks = [
       <!-- MARCA -->
       <div class="reveal flex flex-col items-center md:items-start gap-6">
         <a href="#" class="flex items-center gap-2 text-2xl font-bold group">
-          <span
-            class="text-primary font-black group-hover:scale-110 transition-transform"
-          >
-            JR
-          </span>
+          <Image
+            src={Logo}
+            class="w-8 h-full object-contain"
+            alt="Joseph - JR Digital Estudio"
+          />
           <span class="text-white text-xl">Digital Estudio</span>
         </a>
 
@@ -116,14 +118,12 @@ const footerLinks = [
 
     <!-- BARRA FINAL -->
     <div
-      class="reveal border-t border-border pt-10
-             flex flex-col md:flex-row
-             items-center justify-between
-             gap-6 text-text-muted text-sm"
+      class="reveal border-t border-border pt-10 flex flex-col md:flex-row items-center justify-between gap-6 text-text-muted text-sm"
     >
-      <p class="text-center md:text-left">
-        © {currentYear} JR Digital Estudio. Todos os direitos reservados.
-      </p>
+      <div class="text-center md:text-left">
+        <p>© {currentYear} JR Digital Estudio. Todos os direitos reservados.</p>
+        <p class="mt-1 opacity-75">CNPJ: 64.995.325/0001-34</p>
+      </div>
 
       <div class="flex gap-8 justify-center md:justify-end">
         <a href="/privacidade" class="hover:text-primary transition-colors"

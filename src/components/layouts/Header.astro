@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import MobileMenu from "./MobileMenu.astro";
+import Logo from "../../assets/img/logo-jr.png";
 
 type NavLink = {
   label: string;
@@ -28,10 +30,11 @@ const navLinks: NavLink[] = [
 >
   <div class="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between">
     <a href="/" class="flex items-center gap-2 text-xl font-bold group">
-      <span
-        class="text-primary font-black group-hover:scale-110 transition-transform"
-        >JR</span
-      >
+      <Image
+        src={Logo}
+        class="w-10 h-full object-cover"
+        alt="Joseph - JR Digital Estudio"
+      />
       <span class="text-white">Digital Estudio</span>
     </a>
 
@@ -42,7 +45,7 @@ const navLinks: NavLink[] = [
           <div class="relative group/nav">
             <a
               href={link.hf}
-              class="nav-link text-sm font-medium text-text hover:text-primary py-2 flex items-center gap-1 relative
+              class="cursor-pointer nav-link text-sm font-medium text-text hover:text-primary py-2 flex items-center gap-1 relative
                      after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-primary after:w-0
                      hover:after:w-full after:transition-all
                      [&.active]:text-primary [&.active]:after:w-full"
@@ -86,245 +89,238 @@ const navLinks: NavLink[] = [
   </div>
 
   <MobileMenu navLinks={navLinks} />
-</header>
 
-<script>
-  function setupHeader() {
-    /* ELEMENTOS */
-    const menuBtn = document.getElementById(
-      "menu-btn",
-    ) as HTMLButtonElement | null;
-    const mobileMenu = document.getElementById(
-      "mobile-menu",
-    ) as HTMLElement | null;
-    const closeBtn = document.getElementById(
-      "close-menu",
-    ) as HTMLButtonElement | null;
-    const overlay = document.getElementById(
-      "mobile-overlay",
-    ) as HTMLElement | null;
+  <script>
+    function setupHeader() {
+      /* ELEMENTOS */
+      const menuBtn = document.getElementById(
+        "menu-btn",
+      ) as HTMLButtonElement | null;
+      const mobileMenu = document.getElementById(
+        "mobile-menu",
+      ) as HTMLElement | null;
+      const closeBtn = document.getElementById(
+        "close-menu",
+      ) as HTMLButtonElement | null;
+      const overlay = document.getElementById(
+        "mobile-overlay",
+      ) as HTMLElement | null;
 
-    const sections = document.querySelectorAll<HTMLElement>("section[id]");
-    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+      const sections = document.querySelectorAll<HTMLElement>("section[id]");
+      const navLinks =
+        document.querySelectorAll<HTMLAnchorElement>(".nav-link");
 
-   
-    function smoothScrollTo(rawTarget: string) {
-      if (!rawTarget) return;
+      function smoothScrollTo(rawTarget: string) {
+        if (!rawTarget) return;
 
-      
-      const targetId = rawTarget.includes("#")
-        ? rawTarget.split("#")[1]
-        : rawTarget;
+        const targetId = rawTarget.includes("#")
+          ? rawTarget.split("#")[1]
+          : rawTarget;
 
-      if (!targetId) return;
+        if (!targetId) return;
 
-      const targetElement =
-        targetId === "top" ? document.body : document.getElementById(targetId);
+        const targetElement =
+          targetId === "top"
+            ? document.body
+            : document.getElementById(targetId);
 
-      if (!targetElement) return;
+        if (!targetElement) return;
 
-      const headerOffset = 80; 
-      const elementPosition = targetElement.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        const headerOffset = 80;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
-      window.scrollTo({
-        top: targetId === "top" ? 0 : offsetPosition,
-        behavior: "smooth",
-      });
-
-
-      history.replaceState(null, "", window.location.pathname);
-    }
-
-   
-    document
-      .querySelectorAll<HTMLAnchorElement>('a[href*="#"]')
-      .forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          const href = this.getAttribute("href");
-          if (!href || !href.includes("#")) return;
-
-          const [path, hash] = href.split("#");
-
-          const currentPath = window.location.pathname;
-
-       
-          if (path && path !== "" && path !== currentPath) {
-            return;
-          }
-
-          e.preventDefault();
-          smoothScrollTo(href);
+        window.scrollTo({
+          top: targetId === "top" ? 0 : offsetPosition,
+          behavior: "smooth",
         });
-      });
 
-
-    function updateActiveLink() {
-      let current = "";
-
-      sections.forEach((section) => {
-        const top = section.offsetTop - 120;
-        const height = section.offsetHeight;
-
-        if (window.scrollY >= top && window.scrollY < top + height) {
-          current = section.id;
-        }
-      });
-
-
-      resetActiveState();
-
-      if (window.scrollY < 200) {
-        activateById("top");
-        return;
+        history.replaceState(null, "", window.location.pathname);
       }
 
-      if (!current) return;
+      document
+        .querySelectorAll<HTMLAnchorElement>('a[href*="#"]')
+        .forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            const href = this.getAttribute("href");
+            if (!href || !href.includes("#")) return;
 
+            const [path, hash] = href.split("#");
 
-      activateById(current);
+            const currentPath = window.location.pathname;
 
-  
-      const hierarchy: Record<string, string> = {
-        services: "Serviços",
-        features: "Serviços",
-        process: "Serviços",
-      };
+            if (path && path !== "" && path !== currentPath) {
+              return;
+            }
 
-      if (hierarchy[current]) {
+            e.preventDefault();
+            smoothScrollTo(href);
+          });
+        });
+
+      function updateActiveLink() {
+        let current = "";
+
+        sections.forEach((section) => {
+          const top = section.offsetTop - 120;
+          const height = section.offsetHeight;
+
+          if (window.scrollY >= top && window.scrollY < top + height) {
+            current = section.id;
+          }
+        });
+
+        resetActiveState();
+
+        if (window.scrollY < 200) {
+          activateById("top");
+          return;
+        }
+
+        if (!current) return;
+
+        activateById(current);
+
+        const hierarchy: Record<string, string> = {
+          services: "Serviços",
+          features: "Serviços",
+          process: "Serviços",
+        };
+
+        if (hierarchy[current]) {
+          navLinks.forEach((link) => {
+            if (link.textContent?.trim() === hierarchy[current]) {
+              link.classList.add("active");
+            }
+          });
+        }
+
+        Object.entries(hierarchy).forEach(([parent, children]) => {
+          if (children.includes(current)) {
+            activateById(parent);
+          }
+        });
+      }
+
+      function activateById(id: string) {
         navLinks.forEach((link) => {
-          if (link.textContent?.trim() === hierarchy[current]) {
+          const href = link.getAttribute("href");
+          if (!href) return;
+
+          const linkId = href.includes("#") ? href.split("#")[1] : "";
+
+          if (linkId === id) {
             link.classList.add("active");
           }
         });
       }
 
-      Object.entries(hierarchy).forEach(([parent, children]) => {
-        if (children.includes(current)) {
-          activateById(parent);
-        }
-      });
-    }
-
-
-    function activateById(id: string) {
-      navLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (!href) return;
-
-        const linkId = href.includes("#") ? href.split("#")[1] : "";
-
-        if (linkId === id) {
-          link.classList.add("active");
-        }
-      });
-    }
-
-    function resetActiveState() {
-      navLinks.forEach((l) => l.classList.remove("active"));
-    }
-
-    window.addEventListener("scroll", updateActiveLink);
-    updateActiveLink();
-
-    /* MENU MOBILE + TRAVA DE SCROLL */
-    function lockScroll() {
-      document.body.style.overflow = "hidden";
-    }
-
-    function unlockScroll() {
-      document.body.style.overflow = "";
-    }
-
-    function openMenu() {
-      if (!mobileMenu) return;
-      mobileMenu.classList.remove("h-0", "opacity-0");
-      mobileMenu.classList.add("h-screen", "opacity-100");
-      overlay?.classList.remove("opacity-0");
-      overlay?.classList.add("opacity-100");
-      lockScroll();
-    }
-
-    function closeMenu() {
-      if (!mobileMenu) return;
-      mobileMenu.classList.add("h-0", "opacity-0");
-      mobileMenu.classList.remove("h-screen", "opacity-100");
-      overlay?.classList.remove("opacity-100");
-      overlay?.classList.add("opacity-0");
-      unlockScroll();
-
-      // Fecha submenus ao fechar o menu principal
-      document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
-        s.classList.add("hidden");
-        s.classList.remove("flex");
-      });
-      document.querySelectorAll(".fa-chevron-down").forEach((i) => {
-        i.classList.remove("rotate-180");
-      });
-    }
-
-    function toggleMenu() {
-      if (!mobileMenu) return;
-      const isOpen = mobileMenu.classList.contains("opacity-100");
-      isOpen ? closeMenu() : openMenu();
-    }
-
-    menuBtn?.addEventListener("click", toggleMenu);
-    closeBtn?.addEventListener("click", closeMenu);
-    overlay?.addEventListener("click", closeMenu);
-
-    /* SUBMENU TOGGLE */
-    function closeAllSubmenus() {
-      document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
-        s.classList.add("hidden");
-        s.classList.remove("flex");
-      });
-      document.querySelectorAll(".fa-chevron-down").forEach((i) => {
-        i.classList.remove("rotate-180");
-      });
-    }
-
-    function toggleSubmenu(target: string) {
-      const submenu = document.getElementById(`submenu-${target}`);
-      const icon = document.querySelector(`[data-target="${target}"] i`);
-      if (!submenu) return;
-
-      const isOpen = submenu.classList.contains("flex");
-      closeAllSubmenus();
-
-      if (!isOpen) {
-        submenu.classList.remove("hidden");
-        submenu.classList.add("flex");
-        icon?.classList.add("rotate-180");
+      function resetActiveState() {
+        navLinks.forEach((l) => l.classList.remove("active"));
       }
+
+      window.addEventListener("scroll", updateActiveLink);
+      updateActiveLink();
+
+      /* MENU MOBILE + TRAVA DE SCROLL */
+      function lockScroll() {
+        document.body.style.overflow = "hidden";
+      }
+
+      function unlockScroll() {
+        document.body.style.overflow = "";
+      }
+
+      function openMenu() {
+        if (!mobileMenu) return;
+        mobileMenu.classList.remove("h-0", "opacity-0");
+        mobileMenu.classList.add("h-screen", "opacity-100");
+        overlay?.classList.remove("opacity-0");
+        overlay?.classList.add("opacity-100");
+        lockScroll();
+      }
+
+      function closeMenu() {
+        if (!mobileMenu) return;
+        mobileMenu.classList.add("h-0", "opacity-0");
+        mobileMenu.classList.remove("h-screen", "opacity-100");
+        overlay?.classList.remove("opacity-100");
+        overlay?.classList.add("opacity-0");
+        unlockScroll();
+
+        // Fecha submenus ao fechar o menu principal
+        document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
+          s.classList.add("hidden");
+          s.classList.remove("flex");
+        });
+        document.querySelectorAll(".fa-chevron-down").forEach((i) => {
+          i.classList.remove("rotate-180");
+        });
+      }
+
+      function toggleMenu() {
+        if (!mobileMenu) return;
+        const isOpen = mobileMenu.classList.contains("opacity-100");
+        isOpen ? closeMenu() : openMenu();
+      }
+
+      menuBtn?.addEventListener("click", toggleMenu);
+      closeBtn?.addEventListener("click", closeMenu);
+      overlay?.addEventListener("click", closeMenu);
+
+      /* SUBMENU TOGGLE */
+      function closeAllSubmenus() {
+        document.querySelectorAll('[id^="submenu-"]').forEach((s) => {
+          s.classList.add("hidden");
+          s.classList.remove("flex");
+        });
+        document.querySelectorAll(".fa-chevron-down").forEach((i) => {
+          i.classList.remove("rotate-180");
+        });
+      }
+
+      function toggleSubmenu(target: string) {
+        const submenu = document.getElementById(`submenu-${target}`);
+        const icon = document.querySelector(`[data-target="${target}"] i`);
+        if (!submenu) return;
+
+        const isOpen = submenu.classList.contains("flex");
+        closeAllSubmenus();
+
+        if (!isOpen) {
+          submenu.classList.remove("hidden");
+          submenu.classList.add("flex");
+          icon?.classList.add("rotate-180");
+        }
+      }
+
+      document
+        .querySelectorAll<HTMLElement>(
+          '.mobile-link[data-has-submenu="true"], .submenu-toggle',
+        )
+        .forEach((element) => {
+          element.addEventListener("click", (e) => {
+            e.preventDefault();
+            const target = element.getAttribute("data-target");
+            if (target) toggleSubmenu(target);
+          });
+        });
+
+      // Clique em link final do mobile -> Fecha menu e rola
+      document
+        .querySelectorAll<HTMLElement>(
+          '.mobile-link:not([data-has-submenu="true"]), [data-sub-link="true"]',
+        )
+        .forEach((link) => {
+          link.addEventListener("click", () => {
+            closeMenu();
+            // O listener global de anchor acima já cuidará da rolagem e da URL
+          });
+        });
     }
 
-    document
-      .querySelectorAll<HTMLElement>(
-        '.mobile-link[data-has-submenu="true"], .submenu-toggle',
-      )
-      .forEach((element) => {
-        element.addEventListener("click", (e) => {
-          e.preventDefault();
-          const target = element.getAttribute("data-target");
-          if (target) toggleSubmenu(target);
-        });
-      });
-
-    // Clique em link final do mobile -> Fecha menu e rola
-    document
-      .querySelectorAll<HTMLElement>(
-        '.mobile-link:not([data-has-submenu="true"]), [data-sub-link="true"]',
-      )
-      .forEach((link) => {
-        link.addEventListener("click", () => {
-          closeMenu();
-          // O listener global de anchor acima já cuidará da rolagem e da URL
-        });
-      });
-  }
-
-  // Execução inicial e suporte ao Astro Transitions
-  setupHeader();
-  document.addEventListener("astro:after-swap", setupHeader);
-</script>
+    // Execução inicial e suporte ao Astro Transitions
+    setupHeader();
+    document.addEventListener("astro:after-swap", setupHeader);
+  </script>
+</header>
