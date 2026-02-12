@@ -10,6 +10,8 @@ interface Props {
 }
 
 const { navLinks } = Astro.props;
+import Image from "astro/components/Image.astro";
+import logo from "../../assets/img/logo-jr.png";
 ---
 
 <div
@@ -32,8 +34,7 @@ const { navLinks } = Astro.props;
       class="flex items-center justify-between p-6 border-b border-border/30 bg-surface/80 backdrop-blur-lg"
     >
       <a href="/" class="flex items-center gap-2 text-xl font-bold">
-        <span class="text-primary font-black">JR</span>
-        <span class="text-white">Digital Studio</span>
+        <Image src={logo} alt={"jr digital estudio"} width={140}/>
       </a>
 
       <!-- Botão fechar (X) -->
