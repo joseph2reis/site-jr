@@ -5,7 +5,7 @@ export function initParallax() {
   window.addEventListener('scroll', () => {
     const scrollValue = window.scrollY;
     // Ajuste o 0.1 para mais ou menos velocidade de movimento
-    const moveValue = scrollValue * 0.10; 
+    const moveValue = scrollValue * 0.08; 
     
     // Movemos a imagem levemente para cima enquanto o usuário desce
     bg.style.transform = `translateY(${moveValue}px)`;
